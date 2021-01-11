@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>购物车</title>
+    <script src="./js/jquery-3.3.1.min.js"></script>
+    <style>
+        img{
+            width: 100px;
+            height: 50px;
+            /* 图文混排时，让文字参考图片垂直的位置排版 */
+            vertical-align: middle;
+        }
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .num{
+            width: 30px;
+            text-align: center;
+        }
+        .decount,
+        .add{
+            width: 20px;
+        }
+        a{
+            text-decoration: none;
+            color: #00b7ff;
+        }
+        .money{
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <table border="1px">
+        <tr>
+            <th>商品名称</th>
+            <th>状态</th>
+            <th>商品数量</th>
+            <th>单价</th>
+            <th>小计</th>
+            <th>操作</th>
+        </tr>
+        <!-- 第一个商品 -->
+        <tr class="shop-item">
+            <td>
+                <img src="./img/脸红可爱小女孩.jpg" alt="">
+                精品大床房精品酒店
+            </td>
+            <td>可购买</td>
+            <td>
+                <input type="button" value="-" class="decount">
+                <input type="text" value="1" class="num" disabled>
+                <input type="button" value="+" class="add">
+            </td>
+            <td class="money">59.9</td>
+            <td class="money"></td>
+            <td>
+                <a href="#" class="del">删除商品</a>
+            </td>
+        </tr>
+        <!-- 第二个商品 -->
+        <tr class="shop-item">
+            <td>
+                <img src="./img/脸红可爱小女孩.jpg" alt="">
+                精品大床房精品酒店
+            </td>
+            <td>可购买</td>
+            <td>
+                <input type="button" value="-" class="decount">
+                <input type="text" value="1" class="num" disabled>
+                <input type="button" value="+" class="add">
+            </td>
+            <td class="money">199.9</td>
+            <td class="money"></td>
+            <td>
+                <a href="#" class="del">删除商品</a>
+            </td>
+        </tr>
+        <!-- 第三个商品 -->
+        <tr class="shop-item">
+            <td>
+                <img src="./img/脸红可爱小女孩.jpg" alt="">
+                精品大床房精品酒店
+            </td>
+            <td>可购买</td>
+            <td>
+                <input type="button" value="-" class="decount">
+                <input type="text" value="1" class="num" disabled>
+                <input type="button" value="+" class="add">
+            </td>
+            <td class="money">99.9</td>
+            <td class="money"></td>
+            <td>
+                <a href="#" class="del">删除商品</a>
+            </td>
+        </tr>
+        <tr class="shop-item">
+            <td>
+                <img src="./img/脸红可爱小女孩.jpg" alt="">
+                精品大床房精品酒店
+            </td>
+            <td>可购买</td>
+            <td>
+                <input type="button" value="-" class="decount">
+                <input type="text" value="1" class="num" disabled>
+                <input type="button" value="+" class="add">
+            </td>
+            <td class="money">299.9</td>
+            <td class="money"></td>
+            <td>
+                <a href="#" class="del">删除商品</a>
+            </td>
+        </tr>
+        <tr class="shop-item">
+            <td>
+                <img src="./img/脸红可爱小女孩.jpg" alt="">
+                精品大床房精品酒店
+            </td>
+            <td>可购买</td>
+            <td>
+                <input type="button" value="-" class="decount">
+                <input type="text" value="1" class="num" disabled>
+                <input type="button" value="+" class="add">
+            </td>
+            <td class="money">89.9</td>
+            <td class="money"></td>
+            <td>
+                <a href="#" class="del">删除商品</a>
+            </td>
+        </tr>
+        <!-- 商品总件数，总价格 -->
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>商品：<span id="nums">0</span> 件</td>
+            <td>总金额：<span id="sums">0</span> 元</td>
+            <td></td>
+        </tr>
+    </table>
+
+    <script>
+        // 删除商品
+        $(".del").click(function(){
+            if(confirm("是否删除该商品"))
+            {
+                $(this).parent().parent().remove();
+                countSum();
+            }
+        })
+
+        // 初始化时调用
+        countSum();
+        function countSum(){
+            var nums = 0;
+            var sums = 0;
+            // 初始化时，默认小计的数值
+            $(".shop-item").each(function(index){
+                // 1.获取商品数量   ep() 等于第几个索引的标签
+                var shopNum = $(".num").eq(index).val();
+                // 2.获取商品单价
+                var price = $(".num").eq(index).parent().next("td").text();
+                // 3.求总价
+                var sum = shopNum * price;
+                $(".num").eq(index).parent().next("td").next("td").text(sum.toFixed(2));
+
+                // 直接求商品件数，总金额
+                nums += parseInt(shopNum);// 强制转格式
+                sums += sum;
+            });
+            $("#nums").text(nums);
+            $("#sums").text(sums.toFixed(2));
+        };
+
+        $(".add").click(function(){
+            // 1.获取当前商品的数量值
+            // prev() 获取相邻标签的前一个标签 next() 获取相邻的下一个标签
+            var shopNum = $(this).prev("input").val();
+            // 2.累加 1
+            shopNum++;
+            // 3.重新赋值
+            $(this).prev("input").val(shopNum);
+            // 方法引入
+            count($(this),shopNum);
+        });
+        $(".decount").click(function(){
+            // 1.获取当前商品的数量值
+            // prev() 获取相邻标签的前一个标签 next() 获取相邻的下一个标签
+            var shopNum = $(this).next("input").val();
+            // 判断商品不能减为负数
+            if(shopNum > 1)
+            {
+                // 2.累加 1
+                shopNum--;
+            }
+            // 3.重新赋值
+            $(this).next("input").val(shopNum);
+            // 方法引入
+            count($(this),shopNum);
+        });
+
+        // 优化代码（相同代码用方法，消除冗余）
+        function count(obj,shopNum)
+        {
+            // 4.获取商品的单价
+            var price = obj.parent().next("td").text();
+            // 5.求总价格
+            var sum = price * shopNum;
+            // 6.赋值到小计框下
+            obj.parent().next("td").next("td").text(sum.toFixed(2));
+            countSum();
+        }
+    </script>
+</body>
+</html>
